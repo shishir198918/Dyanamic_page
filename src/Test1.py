@@ -1,5 +1,6 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,make_response
 import json
+import db
 
 page=Flask(__name__, template_folder="templates") # (__name__) used for where to look for resources 
 count=0
@@ -35,7 +36,7 @@ def d1():
 @page.route("/show_data",methods=["GET"])
 def show():
     if request.method=="GET":
-        file=open("data/db.json","r")
+        file=open("data/db.json","r",encoding="utf-8")
         project_data=json.load(file)
         file.close()
         
@@ -64,4 +65,19 @@ def append_data():
         file.close()
         return input_data
 
+@page.route("/show_db" ,methods=["GET"])
+def show1_db():
+    if request.method=="GET":
+        project_data=db.json_data("project")
+        return render_template ("index.html",Project_data=project_data)
+
+@page.route("/show_image/<int:p_id>")
+def image(p_id):
+    response=make_response()
+    imag=db.image_data('project',p_id)
+    byte_image=imag.tobytes()
+    print(type(imag))
+    print(type(byte_image))
+    response.set_data(byte_image)
+    return response
 
