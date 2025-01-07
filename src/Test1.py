@@ -58,12 +58,14 @@ def append_data():
         return render_template("fromtest.html")
     if request.method=="POST":
         input_data=request.form
+        image=request.files
         file=open("data/db.json","r+")
         db=file.read()
         file.seek(len(db)-1)
         file.write(','+json.dumps(input_data)+']')
         file.close()
-        return input_data
+    
+        return image
 
 @page.route("/show_db" ,methods=["GET"])
 def show1_db():
@@ -73,8 +75,9 @@ def show1_db():
 
 @page.route("/show_image/<int:p_id>")
 def image(p_id):
-    response=make_response()
+    
     imag=db.image_data('project',p_id)
+    response=make_response()
     byte_image=imag.tobytes()
     print(type(imag))
     print(type(byte_image))

@@ -7,20 +7,20 @@ def connection(db):
                         port="5432",
                         host="localhost",
                         password="5101",
-                        user="postgres")
+                        user="portfolio")
         #print("connection created ")
         return conn
     except pg.Error as e:
         print(e)
 #connection("project")          
 
-def insert_text_data(db,p_id,title,description):
+def insert_text_data(db,title,description):
     conn=connection(db)
     try:
         l1=conn.cursor()
-        query="""insert into text_data
-              values(%s,%s,%s)  """
-        l1.execute(query,(p_id,title,description,))
+        query="""insert into projects(title,description)
+              values(%s,%s)  """
+        l1.execute(query,(title,description))
         conn.commit()
     except pg.Error as e:
         conn.rollback()
@@ -28,7 +28,7 @@ def insert_text_data(db,p_id,title,description):
     finally:
         l1.close()
         conn.close()
-#insert_text_data("project","4","title-4","description4 for anything ")
+
                 
 
 def json_data(db):
@@ -37,8 +37,8 @@ def json_data(db):
     try:
         table=conn.cursor()
         query=""" select json_build_object
-        ('id',p_id,'title',title,'description',description) 
-        from text_data"""
+        ('id',id,'title',title,'description',description) 
+        from projects"""
         table.execute(query)
         l1=table.fetchall()
         l2=[]
@@ -58,10 +58,10 @@ def insert_image(db,file_path,i):
     try:
         file=open(file_path,"rb")
         image=file.read()
-        query1="""update image set pro_image=%s where id=%s"""
-        #query="""insert into image values(%s,%s)"""
+        #query1="""update image set pro_image=%s where id=%s"""
+        #query="""insert into projects(id,image) values(%s,%s)"""
         table=conn.cursor()
-        table.execute(query1,(pg.Binary(image),i,))
+        table.execute(query,(i,pg.Binary(image)))
         conn.commit()
     except pg.Error as e:
         print(e)
@@ -74,7 +74,7 @@ def image_data(db,i):
     conn=connection(db)
     try:
         
-        query="""select pro_image from image where id=%s"""
+        query="""select image from projects where id=%s"""
         table=conn.cursor()
         table.execute(query,(i,))
         binary_image=table.fetchone()
@@ -85,8 +85,7 @@ def image_data(db,i):
         table.close()
         conn.close()        
 
-print(type(image_data('project',2)))
-#insert_image("project","test_image/image3.jpg",3)
+
 
 
 
