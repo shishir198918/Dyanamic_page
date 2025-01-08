@@ -7,20 +7,20 @@ def connection(db):
                         port="5432",
                         host="localhost",
                         password="5101",
-                        user="portfolio")
+                        user="postgres")
         #print("connection created ")
         return conn
     except pg.Error as e:
         print(e)
-#connection("project")          
+        
 
-def insert_text_data(db,title,description):
+def insert_data(db,title,description,image):
     conn=connection(db)
     try:
         l1=conn.cursor()
-        query="""insert into projects(title,description)
-              values(%s,%s)  """
-        l1.execute(query,(title,description))
+        query="""insert into projects(title,description,image)
+              values(%s,%s,%s)  """
+        l1.execute(query,(title,description,pg.Binary(image)))
         conn.commit()
     except pg.Error as e:
         conn.rollback()
@@ -28,6 +28,21 @@ def insert_text_data(db,title,description):
     finally:
         l1.close()
         conn.close()
+
+def image_data(db,key):
+    conn=connection(db)
+    try:
+        
+        query="""select image from projects where id=%s"""
+        table=conn.cursor()
+        table.execute(query,(key,))
+        binary_image=table.fetchone()
+        return binary_image[0]
+    except pg.Error as e:
+        print(e)
+    finally:
+        table.close()
+        conn.close()        
 
                 
 
@@ -70,20 +85,7 @@ def insert_image(db,file_path,i):
         table.close()
         conn.close()     
 
-def image_data(db,i):
-    conn=connection(db)
-    try:
         
-        query="""select image from projects where id=%s"""
-        table=conn.cursor()
-        table.execute(query,(i,))
-        binary_image=table.fetchone()
-        return binary_image[0]
-    except pg.Error as e:
-        print(e)
-    finally:
-        table.close()
-        conn.close()        
 
 
 
