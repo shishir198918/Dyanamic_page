@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Input_data</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update form </title>
 </head>
 <body>
-      <form method="POST" action="#" enctype=multipart/form-data>
+    <form method="POST" action="#" enctype=multipart/form-data>
         <label for="title">Title</label>
         <input type="text" 
         name="title" 
         required 
         placeholder="title of project"
-        id="title">
+        id="title"
+        value="">
+        <br>
         <br>
         <label for="description">Description</label>
         
           <textarea id="description" row="50" 
           col="70" 
-          name="description" 
-          placeholder="describe your project" 
-          required></textarea>
+          name="description"></textarea>
+        <br>
         <br>
         <label for="image">Project Image</label>
         <input type="file" id="image" name="image">
         <input type="submit" value="SUBMIT">
+        
       </form>
 </body>
 </html>
-  

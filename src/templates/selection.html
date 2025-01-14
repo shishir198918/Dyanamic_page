@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose title</title>
+</head>
+<body>
+    <label for="id" >Choose the project title </label>
+        <select id="id" name="id" required>
+            <option value="">--Select a project--</option>
+            {%for project in project_data%}
+            <option value="{{project['id']}}">
+                
+                {{project["title"]}}
+                
+            </option>
+            {% endfor %}
+            <input type="submit">
+        </select>
+</body>
+</html>

@@ -18,9 +18,9 @@ def insert_data(db,title,description,image):
     conn=connection(db)
     try:
         l1=conn.cursor()
-        query="""insert into projects(title,description,image)
-              values(%s,%s,%s)  """
-        l1.execute(query,(title,description,pg.Binary(image)))
+        query=f"""insert into projects
+        (title,description,image)values('{title}','{description}',%s)  """
+        l1.execute(query,(pg.Binary(image),))
         conn.commit()
     except pg.Error as e:
         conn.rollback()
@@ -68,22 +68,25 @@ def json_data(db):
         conn.close()   
 
 
-def insert_image(db,file_path,i):
+def project_json(db,id):
     conn=connection(db)
     try:
-        file=open(file_path,"rb")
-        image=file.read()
-        #query1="""update image set pro_image=%s where id=%s"""
-        #query="""insert into projects(id,image) values(%s,%s)"""
+        query="""select json_build_object
+        ('title',title,'description','description')
+          from projects where id=%s"""
         table=conn.cursor()
-        table.execute(query,(i,pg.Binary(image)))
-        conn.commit()
+        table.execute(query,(id,))
+        l1=table.fetchall()
+        table.close()
+        return l1[0]
     except pg.Error as e:
         print(e)
-        conn.rollback()
     finally:
-        table.close()
-        conn.close()     
+        conn.close()
+
+
+
+
 
         
 

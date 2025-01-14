@@ -84,14 +84,4 @@ def image(p_id):
     response.set_data(byte_image)
     return response
 
-@page.route("/form" ,methods=["GET","POST"])
-def insert():
-    if request.method=="GET":
-        return render_template("fromtest.html")
-    if request.method=="POST":
 
-        text=request.form
-        image=request.files
-        response=make_response()
-        response.set_data(image["files"])
-        return response
