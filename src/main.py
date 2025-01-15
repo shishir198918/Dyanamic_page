@@ -1,4 +1,5 @@
-from flask import Flask,render_template,request,make_response
+from flask import Flask,render_template,request,make_response,url_for,\
+    redirect,flash
 import json
 import db 
 
@@ -19,9 +20,11 @@ def form_data():
         text=request.form
         image=request.files["image"].read()
         if Isempty(text["title"] and text["description"]):
-            print("khali sa khali hai")
-        #db.insert_data("portfolio",text["title"],text["description"],image)
-        print(text)
+            flash("Blank submission","error")
+        
+        else:
+            #db.insert_data("portfolio",text["title"],text["description"],image)
+            flash("Submit sucsessfuly","message")
         return render_template("fromtest.html")
 
 @page.route("/image/<int:id>")
